@@ -17,8 +17,12 @@ const app = express()
 
 // Connect to database
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "DB connection failed" });
+  }
 });
 await connectCloudinary()
 

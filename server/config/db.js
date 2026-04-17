@@ -3,20 +3,20 @@ import mongoose from "mongoose";
 let isConnected = false;
 
 const connectDB = async () => {
-  if (isConnected) {
-    return;
-  }
+  if (isConnected) return;
 
   try {
-    const db = await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "job-portal"
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: "job-portal",
+      serverSelectionTimeoutMS: 5000
     });
 
-    isConnected = db.connections[0].readyState;
-    console.log("Database Connected");
+    isConnected = conn.connections[0].readyState;
+    console.log("✅ MongoDB Connected");
 
   } catch (error) {
-    console.log("DB Error:", error);
+    console.log("❌ DB Error:", error.message);
+    throw error;
   }
 };
 
